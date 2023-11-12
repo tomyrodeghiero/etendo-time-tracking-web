@@ -1,15 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useProgress } from "../../context/ProgressContext";
 import WorkedTasksToday from "../worked-tasks-today";
 import NextDayTasks from "../next-day-tasks";
 import ProblemsFound from "../problems-found";
-import { Step, StepLabel, Stepper } from "@mui/material";
-import { STEPS } from "../../utils/constants";
 import VerticalLinearStepper from "../vertical-linear-stepper";
 
 interface PhaseComponentProps {
-  assignedTasks: any[];
-  setAssignedTasks: React.Dispatch<React.SetStateAction<any[]>>;
+  assignedTasks: any;
+  setAssignedTasks: any;
   users: any;
 }
 
@@ -19,8 +17,6 @@ const PhaseComponent: React.FC<PhaseComponentProps> = ({
   users,
 }) => {
   const { currentPhase } = useProgress();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   return (
     <div className="flex h-full w-full">
