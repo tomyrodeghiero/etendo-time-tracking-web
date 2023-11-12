@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup-enter {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Añade esto a tu archivo CSS global o en un bloque <style> en tu componente */
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple-effect::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  border-radius: 50%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+  transition: width 0.5s, height 0.5s, opacity 0.5s, transform 0.5s;
+  transition-timing-function: ease-out;
+}
+
+.ripple-effect:active::after {
+  width: 300%;
+  height: 300%;
+  opacity: 1;
+  transform: scale(0, 0) translate(-50%, -50%);
+  transition: 0s;
+}

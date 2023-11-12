@@ -1,0 +1,9 @@
+# Node Modules
+node_modules
+
+# Env files
+.env
+.env.local
+
+# yarn.lock file
+yarn.lock
