@@ -22,32 +22,18 @@ app.get("/api/tasks", async (req, res) => {
 
     console.log("email", email);
     console.log("providerUserId", providerUserId);
-    console.log("JIRA_API_TOKEN", process.env.JIRA_API_TOKEN);
-    console.log(
-      "prev jira_api_token",
-      "ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518"
-    );
 
-    // compare jira_api_tokens
-    if (
-      process.env.JIRA_API_TOKEN !==
-      "ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518"
-    ) {
-      console.log("son diferentes");
-    } else {
-      console.log("son iguales");
-    }
-
-    const JIRA_TOKEN ="ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518";
+    const JIRA_TOKEN =
+      "ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518";
 
     // Ejemplo de uso del token
     const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/search?jql=assignee=${providerUserId}+order+by+created`;
 
     const response = await fetch(jiraUrl, {
       headers: {
-        Authorization: `Basic ${Buffer.from(`${email}:${JIRA_TOKEN}}`).toString(
-          "base64"
-        )}`,
+        Authorization: `Basic ${Buffer.from(
+          `${email}:ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518`
+        ).toString("base64")}`,
         "Content-Type": "application/json",
       },
     });
@@ -94,7 +80,7 @@ app.post("/api/worklog", async (req, res) => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Basic ${Buffer.from(
-          `${email}:${process.env.JIRA_API_TOKEN}}`
+          `${email}:ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518`
         ).toString("base64")}`,
       },
       body: bodyData,
@@ -115,12 +101,10 @@ app.get("/api/users", async (req, res) => {
     const { email } = req.query;
     console.log("email", email);
 
-    const jiraUrl = `https://etendoproject.atlassian.net/rest/api/2/user/assignable/search?project=INT&maxResults=200`;
-
     const response = await fetch(jiraUrl, {
       headers: {
         Authorization: `Basic ${Buffer.from(
-          `${email}:${process.env.JIRA_API_TOKEN}`
+          `${email}:ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518`
         ).toString("base64")}`,
         Accept: "application/json",
         "Content-Type": "application/json",
