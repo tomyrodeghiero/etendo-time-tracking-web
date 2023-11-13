@@ -1,8 +1,12 @@
 import express from "express";
 import fetch from "node-fetch";
 import { Configuration, OpenAIApi } from "openai";
+import dotenv from "dotenv";
+
 const app = express();
 const port = 5001;
+
+dotenv.config();
 
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -18,15 +22,32 @@ app.get("/api/tasks", async (req, res) => {
 
     console.log("email", email);
     console.log("providerUserId", providerUserId);
+    console.log("JIRA_API_TOKEN", process.env.JIRA_API_TOKEN);
+    console.log(
+      "prev jira_api_token",
+      "ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518"
+    );
+
+    // compare jira_api_tokens
+    if (
+      process.env.JIRA_API_TOKEN !==
+      "ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518"
+    ) {
+      console.log("son diferentes");
+    } else {
+      console.log("son iguales");
+    }
+
+    const JIRA_TOKEN ="ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518";
 
     // Ejemplo de uso del token
     const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/search?jql=assignee=${providerUserId}+order+by+created`;
 
     const response = await fetch(jiraUrl, {
       headers: {
-        Authorization: `Basic ${Buffer.from(
-          `${email}:${process.env.JIRA_API_TOKEN}}`
-        ).toString("base64")}`,
+        Authorization: `Basic ${Buffer.from(`${email}:${JIRA_TOKEN}}`).toString(
+          "base64"
+        )}`,
         "Content-Type": "application/json",
       },
     });
