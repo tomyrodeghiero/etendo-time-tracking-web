@@ -24,7 +24,7 @@ app.get("/api/tasks", async (req, res) => {
     console.log("providerUserId", providerUserId);
 
     const JIRA_TOKEN =
-      "ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518";
+      "ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC";
 
     // Ejemplo de uso del token
     const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/search?jql=assignee=${providerUserId}+order+by+created`;
@@ -32,7 +32,7 @@ app.get("/api/tasks", async (req, res) => {
     const response = await fetch(jiraUrl, {
       headers: {
         Authorization: `Basic ${Buffer.from(
-          `${email}:ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518`
+          `${email}:ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC`
         ).toString("base64")}`,
         "Content-Type": "application/json",
       },
@@ -80,7 +80,7 @@ app.post("/api/worklog", async (req, res) => {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Basic ${Buffer.from(
-          `${email}:ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518`
+          `${email}:ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC`
         ).toString("base64")}`,
       },
       body: bodyData,
@@ -104,7 +104,7 @@ app.get("/api/users", async (req, res) => {
     const response = await fetch(jiraUrl, {
       headers: {
         Authorization: `Basic ${Buffer.from(
-          `${email}:ATATT3xFfGF0UcmNeEAwHlbt0XRMmg4UAXxF5ucU5OBgRvuwUJpt4_wgkXW0sh6IxsyMQm3pi0vyr35y4_guBrDJ2cfqg4TmG5jcG7ekeVVPODpL8f2ao9nRAsAeossEPFJT6_ljBtf-c_wE1JFiDdM8B_9jFR7adwX3T5VX6PbqpKCKbQEOuoo=7833A518`
+          `${email}:ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC`
         ).toString("base64")}`,
         Accept: "application/json",
         "Content-Type": "application/json",
