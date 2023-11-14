@@ -127,6 +127,7 @@ const NextDayTasks = ({ assignedTasks, setAssignedTasks }: any) => {
             selectedTasks={selectedTasks}
             getStatusColor={getStatusColor}
             handleTaskClick={handleTaskClick}
+            user={user}
           />
         ))}
         <button onClick={submitWorklog}>Enviar Worklog</button>
