@@ -14,9 +14,6 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
 
   const [showPopup, setShowPopup] = useState(false);
   const [selectedTask, setSelectedTask] = useState<any>(null);
-  const [improvedInput, setImprovedInput] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [workedTime, setWorkedTime] = useState<string>(""); // Nuevo estado para el tiempo trabajado
   const [searchTask, setSearchTask] = useState(""); // Estado para el término de búsqueda
   const [isFocused, setIsFocused] = useState(false);
   const [showUsers, setShowUsers] = useState(false); // Nuevo estado para controlar la visualización
@@ -72,13 +69,11 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
         </div>
       ));
     } else {
-      // Renderiza tareas
       return taskCategories.map((category, index) => (
         <Tasks
           key={index}
           tasks={filteredTasks.filter(
-            (task: any) =>
-              task.fields.status.statusCategory.name === category.status
+            (task: any) => task.fields.status.name === category.status
           )}
           getStatusColor={getStatusColor}
           handleTaskClick={handleTaskClick}
@@ -102,36 +97,34 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
 
   // Filter tasks
   const toDoTasks = assignedTasks.filter(
-    (task: any) => task.fields.status.statusCategory.name === "To Do"
+    (task: any) => task.fields.status.name === "To Do"
   );
   const definedTasks = assignedTasks.filter(
-    (task: any) => task.fields.status.statusCategory.name === "Defined"
+    (task: any) => task.fields.status.name === "Defined"
   );
   const blockedTasks = assignedTasks.filter(
-    (task: any) => task.fields.status.statusCategory.name === "Blocked"
+    (task: any) => task.fields.status.name === "Blocked"
   );
   const inProgressTasks = assignedTasks.filter(
-    (task: any) => task.fields.status.statusCategory.name === "In Progress"
+    (task: any) => task.fields.status.name === "In Progress"
   );
   const inReviewTasks = assignedTasks.filter(
-    (task: any) => task.fields.status.statusCategory.name === "In Review"
+    (task: any) => task.fields.status.name === "In Review"
   );
   const qaTasks = assignedTasks.filter(
-    (task: any) => task.fields.status.statusCategory.name === "QA"
+    (task: any) => task.fields.status.name === "QA"
   );
 
   // Functions
   const closePopup = () => {
     setShowPopup(false);
     setSelectedTask(null);
-    setImprovedInput("");
-    setDescription("");
   };
 
   const getStatusColor = (status: string) => {
     console.log("status 😀 ", status);
     const colors: any = {
-      "To Do": "bg-blue-300",
+      "To Do": "bg-blue-400",
       Blocked: "bg-red-500",
       "In Progress": "bg-yellow-500",
       "In Review": "bg-orange-500",
@@ -144,8 +137,6 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
 
   const handleTaskClick = (task: any) => {
     setSelectedTask(task);
-    setDescription(""); // Limpia el campo de descripción al abrir el popup
-    setWorkedTime(""); // Limpia el campo de tiempo trabajado al abrir el popup
     setShowPopup(true);
   };
 
@@ -163,42 +154,51 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
   return (
     <div className="flex flex-col w-full h-full mt-4">
       <div className="w-full h-full rounded-xl">
-        <div
-          className={`relative p-3 rounded-full mt-4 mb-8 transition-all duration-1000 ease-in-out ${
-            isFocused ? "w-1/2 rounded-b-md" : "w-12"
-          }`}
-          onClick={handleFocus}
-        >
-          <img
-            src="/assets/icons/search.png"
-            alt="Buscar"
-            className={`absolute cursor-pointer p-2 rounded-full bg-blue-300 left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 ${
-              isFocused && "hidden"
+        <div className="w-full flex items-center my-4 justify-between pr-8">
+          <div
+            className={`relative p-3 rounded-full transition-all duration-1000 ease-in-out ${
+              isFocused ? "w-1/2 rounded-b-md" : "w-12"
             }`}
-          />
-          <input
-            type="text"
-            placeholder={isFocused ? "Buscar tarea..." : ""}
-            value={searchTask}
-            onChange={handleSearchChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            className={`absolute inset-0 w-full p-5 bg-blue-300 text-gray-700 placeholder-gray-600 rounded-sm focus:outline-none transition-all duration-300 ease-in-out ${
-              isFocused ? "opacity-100" : "opacity-0 w-0"
+            onClick={handleFocus}
+          >
+            <img
+              src="/assets/icons/search.png"
+              alt="Buscar"
+              className={`absolute cursor-pointer p-2 rounded-full bg-blue-300 left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 ${
+                isFocused && "hidden"
+              }`}
+            />
+            <input
+              type="text"
+              placeholder={isFocused ? "Buscar tarea..." : ""}
+              value={searchTask}
+              onChange={handleSearchChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className={`absolute inset-0 w-full p-5 bg-blue-300 text-gray-700 placeholder-gray-600 rounded-sm focus:outline-none transition-all duration-300 ease-in-out ${
+                isFocused ? "opacity-100" : "opacity-0 w-0"
+              }`}
+            />
+          </div>
+
+          <div
+            className={`relative p-3 rounded-full transition-all duration-1000 ease-in-out ${
+              isFocused ? "w-1/2 rounded-b-md" : "w-12"
             }`}
-          />
-          <img
-            src="/assets/icons/search-user.png"
-            alt="Buscar Usuarios"
-            className={`absolute cursor-pointer rounded-full bg-blue-400 right-4 top-[80%] transform -translate-y-1/2 h-6 w-6`}
-            onClick={toggleShowUsers} // Agregar función de clic para cambiar la visualización
-          />
+          >
+            <img
+              src="/assets/icons/search-user.png"
+              alt="Buscar"
+              className={`absolute cursor-pointer p-2 rounded-full bg-blue-300 left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 ${
+                isFocused && "hidden"
+              }`}
+              onClick={() => setShowUsers(!showUsers)}
+            />
+          </div>
         </div>
 
         <div
-          className={`h-[55vh] w-full overflow-y-auto ${
-            showUsers && "grid grid-cols-3 gap-4 w-full"
-          }`}
+          className={`h-[55vh] overflow-y-auto gap-4 w-full grid grid-cols-3`}
         >
           {renderContent()}
         </div>

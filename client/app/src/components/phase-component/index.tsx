@@ -27,7 +27,7 @@ const PhaseComponent: React.FC<PhaseComponentProps> = ({
       </div>
 
       {/* Contenido a la derecha del Stepper */}
-      <div className="flex flex-grow justify-center items-center h-full w-3/4">
+      <div className="flex flex-grow h-3/4 w-3/4">
         {currentPhase === 0 && (
           <WorkedTasksToday
             assignedTasks={assignedTasks}

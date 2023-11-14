@@ -84,7 +84,7 @@ const Home = () => {
   return (
     <ProgressProvider>
       <div className="bg-gray-300 h-screen overflow-hidden">
-        <div className="h-[87.5vh]">
+        <div className="h-[90vh]">
           <Header firstName={user?.user?.firstName} />
           <PhaseComponent
             assignedTasks={assignedTasks}
@@ -92,7 +92,7 @@ const Home = () => {
             users={users}
           />
         </div>
-        <div className="h-[12.5vh]">
+        <div className="h-[10vh]">
           <Footer />
         </div>
       </div>

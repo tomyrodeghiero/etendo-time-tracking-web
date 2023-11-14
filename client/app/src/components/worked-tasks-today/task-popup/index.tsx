@@ -75,8 +75,24 @@ const TaskPopup: React.FC<TaskPopupProps> = ({ task, onClose }) => {
 
   return (
     <>
-      <Dialog open={true} onClose={onClose} aria-labelledby="form-dialog-title">
-        <DialogTitle id="form-dialog-title">Time Tracking</DialogTitle>
+      <Dialog
+        open={true}
+        onClose={onClose}
+        aria-labelledby="form-dialog-title"
+        PaperProps={{
+          style: {
+            width: "100%", // Define el ancho del diálogo
+            maxHeight: "100%", // Define la altura máxima del diálogo
+          },
+        }}
+      >
+        <DialogTitle
+          style={{ fontWeight: 600, lineHeight: "1.2" }} // Ajuste de line-height aquí
+          id="form-dialog-title"
+        >
+          {task.fields.summary}
+        </DialogTitle>
+
         <DialogContent>
           <div className="space-y-4">
             <ComparisonBar logged="10d 4h 1m" estimated="2d" />

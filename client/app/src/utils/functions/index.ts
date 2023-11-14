@@ -44,3 +44,27 @@ export const formatSelectedTasksMessage = (selectedTasks: Array<any>) => {
 
   return taskForTheNextDayInText;
 };
+
+export const formatDate = (dateString: any) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const date = new Date(dateString);
+  const day = date.getDate().toString().padStart(2, "0");
+  const monthIndex = date.getMonth(); // getMonth() devuelve un índice de 0-11
+  const month = months[monthIndex];
+  const year = date.getFullYear();
+
+  return `${day}/${month}/${year}`;
+};

@@ -101,6 +101,9 @@ app.get("/api/users", async (req, res) => {
     const { email } = req.query;
     console.log("email", email);
 
+    const jiraUrl =
+      "https://etendoproject.atlassian.net/rest/api/2/user/assignable/search?project=INT&maxResults=200";
+
     const response = await fetch(jiraUrl, {
       headers: {
         Authorization: `Basic ${Buffer.from(

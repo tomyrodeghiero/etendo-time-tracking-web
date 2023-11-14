@@ -5,3 +5,4 @@ export const WAVING_HAND = "/assets/icons/waving-hand.svg";
 export const REFRESH = "/assets/icons/refresh.svg";
 export const STARS = "/assets/icons/stars.png";
 export const TIME = "/assets/icons/time.png";
+export const ISSUE_TAG = "/assets/icons/issue-tag.svg";

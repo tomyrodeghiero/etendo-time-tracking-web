@@ -26,16 +26,28 @@ const ProblemsFound = () => {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full my-8 h-[90%]">
       <TextField
         fullWidth
         label="Problemas Encontrados"
         variant="outlined"
         multiline
-        rows={5}
         value={problems}
+        className="h-full"
         onChange={handleInputChange}
         placeholder="Describe los problemas encontrados..."
+        InputProps={{
+          style: {
+            height: "100%",
+            alignItems: "flex-start", // Alinea el contenido al inicio verticalmente
+          },
+          inputProps: {
+            style: {
+              height: "100%",
+              paddingTop: 0, // Asegúrate de que no haya relleno adicional en la parte superior
+            },
+          },
+        }}
       />
       <button
         onClick={handleSubmit}
