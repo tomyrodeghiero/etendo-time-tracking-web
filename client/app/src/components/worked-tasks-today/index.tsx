@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import Image from "next/image";
-import { TIME } from "../../constants/assets";
 import { Tasks } from "../tasks";
-import { parseTime } from "../../utils/functions";
 import TaskPopup from "./task-popup";
 import { useUser } from "@clerk/nextjs";
 
@@ -24,9 +21,6 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
   );
 
   const loadUserTasks = async (userId: string) => {
-    console.log("USER ID: ", userId);
-    console.log("EMAIL: ", email);
-
     try {
       const response = await fetch(
         `/api/tasks?email=${encodeURIComponent(
@@ -36,16 +30,31 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-      const data = await response.json();
+      const tasks = await response.json();
+
+      // Cargar las transiciones para cada tarea
+      const tasksWithTransitions: any = await Promise.all(
+        tasks.map(async (task: any) => {
+          const transitionsResponse = await fetch(
+            `/api/issue-transitions?email=${encodeURIComponent(
+              email
+            )}&issueKey=${encodeURIComponent(task.key)}`
+          );
+          if (!transitionsResponse.ok) {
+            console.error("Error fetching transitions for task:", task.key);
+            return task; // Retorna la tarea sin transiciones si falla la solicitud
+          }
+          const transitions = await transitionsResponse.json();
+          return { ...task, transitions }; // Combina la tarea con sus transiciones
+        })
+      );
+
+      setAssignedTasks(tasksWithTransitions); // Actualiza el estado con las tareas y sus transiciones
       setShowUsers(false);
-      setAssignedTasks(data); // Actualiza el estado con las tareas del usuario seleccionado
     } catch (error: any) {
-      console.error(error.message);
+      console.error("Error loading user tasks:", error.message);
     }
   };
-
-  // Cambia entre mostrar tareas y usuarios
-  const toggleShowUsers = () => setShowUsers(!showUsers);
 
   // Renderizado condicional de tarjetas de usuario o tareas
   const renderContent = () => {
@@ -77,6 +86,7 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
           )}
           getStatusColor={getStatusColor}
           handleTaskClick={handleTaskClick}
+          user={user}
         />
       ));
     }

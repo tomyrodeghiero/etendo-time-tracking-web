@@ -12,8 +12,6 @@ const Home = () => {
   const [assignedTasks, setAssignedTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [email, setEmail] = useState("");
-
   const [users, setUsers] = useState([]);
 
   const loadUsers = async (email: string, providerUserId: string) => {
@@ -37,7 +35,6 @@ const Home = () => {
     }
   };
 
-  // Esta función se ejecutará dentro de useEffect
   const loadTasks = async (email: string, providerUserId: string) => {
     setLoading(true);
     try {
@@ -49,8 +46,26 @@ const Home = () => {
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
-      const data = await response.json();
-      setAssignedTasks(data); // Actualiza el estado con las tareas obtenidas
+      const tasks = await response.json();
+
+      // Cargar las transiciones para cada tarea
+      const tasksWithTransitions: any = await Promise.all(
+        tasks.map(async (task: any) => {
+          const transitionsResponse = await fetch(
+            `/api/issue-transitions?email=${encodeURIComponent(
+              email
+            )}&issueKey=${encodeURIComponent(task.key)}`
+          );
+          if (!transitionsResponse.ok) {
+            console.error("Error fetching transitions for task:", task.key);
+            return task; // Retorna la tarea sin transiciones si falla la solicitud
+          }
+          const transitions = await transitionsResponse.json();
+          return { ...task, transitions }; // Combina la tarea con sus transiciones
+        })
+      );
+
+      setAssignedTasks(tasksWithTransitions); // Actualiza el estado con las tareas y sus transiciones
     } catch (error: any) {
       setError(error.message);
     } finally {

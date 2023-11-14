@@ -27,7 +27,7 @@ app.get("/api/tasks", async (req, res) => {
       "ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC";
 
     // Ejemplo de uso del token
-    const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/search?jql=assignee=${providerUserId}+order+by+created`;
+    const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/search?jql=assignee = ${providerUserId} AND statusCategory != "Done"`;
 
     const response = await fetch(jiraUrl, {
       headers: {
@@ -151,6 +151,70 @@ app.post("/api/gpt", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send(error.message);
+  }
+});
+
+// Get transitions
+app.get("/api/issue-transitions", async (req, res) => {
+  try {
+    const { issueKey, email } = req.query;
+
+    const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/issue/${issueKey}/transitions`;
+
+    const response = await fetch(jiraUrl, {
+      headers: {
+        Authorization: `Basic ${Buffer.from(
+          `${email}:ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC`
+        ).toString("base64")}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok: " + response.statusText);
+    }
+
+    const transitions = await response.json();
+    res.status(200).json(transitions);
+  } catch (error) {
+    console.error("Error fetching issue transitions:", error);
+    res.status(500).send("Failed to fetch issue transitions");
+  }
+});
+
+// Change issue status
+app.post("/api/change-issue-status", async (req, res) => {
+  try {
+    const { issueKey, transitionId, email } = req.body; // Recibe los datos directamente
+
+    const jiraUrl = `https://etendoproject.atlassian.net/rest/api/3/issue/${issueKey}/transitions`;
+
+    const bodyData = JSON.stringify({
+      transition: {
+        id: transitionId,
+      },
+    });
+
+    const response = await fetch(jiraUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Basic ${Buffer.from(
+          `${email}:ATATT3xFfGF0gLFWgxUeaOAjfiKwdRgnkXbvsWg5tt2RSEkuKuHd7srKYvIZebC2jjKgxVYuLW-4XX5Kc1ogEcFrLGanJWM6OvzWKNr69cf1ugedxHMsqe2eHVE2XB95D0IZgYylT0T8cjrZh8WnMmvCQWIupWBnPMztiRJ5Wfp_kHgGyaMvCAc=598C84FC`
+        ).toString("base64")}`,
+      },
+      body: bodyData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error changing issue status: ${response.statusText}`);
+    }
+
+    const result = await response.json();
+    res.status(200).json(result);
+  } catch (error) {
+    console.error("Error changing issue status:", error);
+    res.status(500).send("Failed to change issue status");
   }
 });
 

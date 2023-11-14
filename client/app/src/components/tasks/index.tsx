@@ -2,17 +2,60 @@ import { TasksProps } from "../../utils/interfaces";
 import { ISSUE_TAG } from "../../constants/assets";
 import { formatDate } from "../../utils/functions";
 import { ButtonBase } from "@mui/material";
+import { useUser } from "@clerk/nextjs";
 
 const TaskItem = ({
   task,
   isSelected,
   handleTaskClick,
   getStatusColor,
+  transitions,
+  user,
 }: any) => {
   console.log("isSelected", isSelected);
+  console.log("transitions", transitions);
+
+  const handleTaskClickModified = (event: any, task: any) => {
+    // Comprobar si el clic proviene del select o sus hijos
+    if (event.target.closest("select")) {
+      return; // No hacer nada si el clic proviene del select
+    }
+    handleTaskClick(task);
+  };
+
+  const handleStatusChange = async (event: any) => {
+    event.stopPropagation(); // Detener la propagación del evento
+
+    const transitionId = event.target.value;
+    const issueKey = task.key;
+    const email: any = user?.user?.primaryEmailAddress?.emailAddress;
+
+    try {
+      const response = await fetch("/api/change-issue-status", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          issueKey,
+          transitionId,
+          email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.statusText}`);
+      }
+      // Aquí puedes manejar la respuesta, como actualizar el estado de la tarea en la UI
+    } catch (error: any) {
+      console.error("Error changing issue status:", error.message);
+    }
+  };
+
   return (
     <ButtonBase
-      onClick={() => handleTaskClick(task)}
+      // onClick={() => handleTaskClick(task)}
+      onClick={(event) => handleTaskClickModified(event, task)}
       style={{
         width: "100%",
         height: "100%",
@@ -62,6 +105,14 @@ const TaskItem = ({
           </div>
           <p className="text-sm font-medium">{task.key}</p>
         </div>
+
+        <select onChange={handleStatusChange}>
+          {transitions?.map((transition: any) => (
+            <option key={transition.id} value={transition.id}>
+              {`${task.fields.status.name} -> ${transition.name}`}
+            </option>
+          ))}
+        </select>
       </div>
     </ButtonBase>
   );
@@ -72,6 +123,7 @@ export const Tasks = ({
   selectedTasks,
   getStatusColor,
   handleTaskClick,
+  user,
 }: TasksProps) => {
   return (
     <>
@@ -84,6 +136,8 @@ export const Tasks = ({
             isSelected={isSelected}
             handleTaskClick={handleTaskClick}
             getStatusColor={getStatusColor}
+            transitions={task.transitions.transitions}
+            user={user}
           />
         );
       })}

@@ -3,4 +3,5 @@ export interface TasksProps {
   getStatusColor: (status: string) => string;
   handleTaskClick: (task: any) => void;
   selectedTasks?: any;
+  user: any;
 }
