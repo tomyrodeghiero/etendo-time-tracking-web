@@ -164,52 +164,46 @@ const WorkedTasksToday = ({ assignedTasks, setAssignedTasks, users }: any) => {
   return (
     <div className="flex flex-col w-full h-full mt-4">
       <div className="w-full h-full rounded-xl">
-        <div className="w-full flex items-center my-4 justify-between pr-8">
-          <div
-            className={`relative p-3 rounded-full transition-all duration-1000 ease-in-out ${
-              isFocused ? "w-1/2 rounded-b-md" : "w-12"
-            }`}
-            onClick={handleFocus}
-          >
-            <img
-              src="/assets/icons/search.png"
-              alt="Buscar"
-              className={`absolute cursor-pointer p-2 rounded-full bg-blue-300 left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 ${
-                isFocused && "hidden"
-              }`}
-            />
-            <input
-              type="text"
-              placeholder={isFocused ? "Buscar tarea..." : ""}
-              value={searchTask}
-              onChange={handleSearchChange}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              className={`absolute inset-0 w-full p-5 bg-blue-300 text-gray-700 placeholder-gray-600 rounded-sm focus:outline-none transition-all duration-300 ease-in-out ${
-                isFocused ? "opacity-100" : "opacity-0 w-0"
-              }`}
-            />
-          </div>
+        <div className="w-full flex items-center my-4 justify-between px-5">
 
-          <div
-            className={`relative p-3 rounded-full transition-all duration-1000 ease-in-out ${
-              isFocused ? "w-1/2 rounded-b-md" : "w-12"
-            }`}
+          {/* Filter Button */}
+          <button
+            className="flex items-center justify-center py-2 mr-2 border border-gray-500 bg-blue-300 text-white rounded-lg px-4 cursor-pointer"
+            onClick={() => setShowUsers(!showUsers)}
           >
             <img
               src="/assets/icons/search-user.png"
               alt="Buscar"
-              className={`absolute cursor-pointer p-2 rounded-full bg-blue-300 left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 ${
-                isFocused && "hidden"
-              }`}
+              className={`h-5 w-5 ${isFocused && "hidden"
+                }`}
               onClick={() => setShowUsers(!showUsers)}
             />
+            <span className="text-blue-900 text-sm font-medium ml-2">Usuarios</span>
+          </button>
+
+          {/* Search Bar */}
+          <div
+            className={`flex items-center relative p-3 rounded-full transition-all duration-1000 ease-in-out w-full`}
+          >
+            <img
+              src="/assets/icons/search.png"
+              alt="Buscar"
+              className="absolute cursor-pointer p-2 left-4 h-8 w-8"
+            />
+            <input
+              type="text"
+              placeholder="Busque por cards, assuntos ou responsáveis..."
+              value={searchTask}
+              onChange={handleSearchChange}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              className="pl-12 pr-3 py-2 w-full bg-white text-gray-700 placeholder-gray-600 rounded-md focus:outline-none"
+            />
           </div>
+
         </div>
 
-        <div
-          className={`h-[55vh] overflow-y-auto gap-4 w-full grid grid-cols-3`}
-        >
+        <div className="h-[55vh] overflow-y-auto gap-4 w-full grid grid-cols-3">
           {renderContent()}
         </div>
 

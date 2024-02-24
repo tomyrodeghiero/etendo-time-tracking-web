@@ -6,6 +6,7 @@ import { ProgressProvider } from "./src/context/ProgressContext";
 import PhaseComponent from "./src/components/phase-component";
 import Header from "./src/components/header";
 import Footer from "./src/components/footer";
+import TokenPopup from "./src/components/token-popup";
 
 const Home = () => {
   const user = useUser();
@@ -13,6 +14,21 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
+  const [showTokenPopup, setShowTokenPopup] = useState(false);
+  const [jiraApiToken, setJiraApiToken] = useState<any>("")
+
+  useEffect(() => {
+    const jiraApiToken = localStorage.getItem("jiraApiToken");
+    setJiraApiToken(jiraApiToken);
+    if (!jiraApiToken) {
+      setShowTokenPopup(true);
+    }
+  }, []);
+
+  const handleTokenSubmit = (token) => {
+    localStorage.setItem("jiraApiToken", token);
+    setShowTokenPopup(false);
+  };
 
   const loadUsers = async (email: string, providerUserId: string) => {
     setLoading(true);
@@ -21,7 +37,7 @@ const Home = () => {
       const response = await fetch(
         `/api/users?email=${encodeURIComponent(
           email
-        )}&providerUserId=${encodeURIComponent(providerUserId)}`
+        )}&providerUserId=${encodeURIComponent(providerUserId)}&jiraApiToken=${encodeURIComponent(jiraApiToken)}`
       );
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -41,7 +57,7 @@ const Home = () => {
       const response = await fetch(
         `/api/tasks?email=${encodeURIComponent(
           email
-        )}&providerUserId=${encodeURIComponent(providerUserId)}`
+        )}&providerUserId=${encodeURIComponent(providerUserId)}&jiraApiToken=${encodeURIComponent(jiraApiToken)}`
       );
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
@@ -98,17 +114,16 @@ const Home = () => {
 
   return (
     <ProgressProvider>
-      <div className="bg-gray-300 h-screen overflow-hidden">
-        <div className="h-[90vh]">
-          <Header firstName={user?.user?.firstName} />
+      {showTokenPopup && (
+        <TokenPopup onSubmit={handleTokenSubmit} />
+      )}
+      <div className="bg-gray-300 h-screen overflow-hidden flex flex-col">
+        <div className="flex flex-grow">
           <PhaseComponent
             assignedTasks={assignedTasks}
             setAssignedTasks={setAssignedTasks}
             users={users}
           />
-        </div>
-        <div className="h-[10vh]">
-          <Footer />
         </div>
       </div>
     </ProgressProvider>

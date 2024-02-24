@@ -14,12 +14,6 @@ const Header = ({ firstName }: any) => {
       <div className="relative bg-blue-900 shadow-md">
         <div className="py-5 flex justify-between px-20 mx-auto items-center">
           <div className="flex items-center gap-12">
-            <Image
-              height={150}
-              width={150}
-              src={ETENDO_WHITE_LOGOTYPE}
-              alt="Etendo Logotype"
-            />
 
             <div className="flex items-center gap-5 rounded">
               <Image
@@ -31,7 +25,7 @@ const Header = ({ firstName }: any) => {
               <div className="flex gap-2">
                 <div className="flex gap-2 items-center">
                   <div className="flex flex-col text-white">
-                    <h2 className="text-lg">Hola {firstName}</h2>
+                    <h2 className="text-lg">Hola, {firstName}</h2>
                     <h3 className="font-semibold text-xl -mt-1">
                       ¡Bienvenido!
                     </h3>
